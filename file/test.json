@@ -1,0 +1,12 @@
+{
+  "firstName": "John",
+  "lastName": "Mark",
+  "gender": "man",
+  "age": 30,
+  "address": {
+    "streetAddress": "150",
+    "city": "San Diego",
+    "state": "CA",
+    "postalCode": "263142"
+  }
+}

@@ -1,0 +1,27 @@
+version: '3'
+services:
+  flask_local_server:
+    image: flask_local_server
+    build:
+      context: .
+      dockerfile: ./flask_local_server/Dockerfile
+    container_name: flask_local_server
+    command: flask --app flaskr run
+    working_dir: /opt
+    network_mode: "host"
+    ports:
+     - "5000:5000"
+    volumes:
+     - ./flaskr:/opt/flaskr
+     - ./file:/opt/file
+  flask-pytest:
+    container_name: pytest
+    image: flask_local_server
+    # command: ping host.docker.internal
+    command: python3 -m pytest flaskr
+    network_mode: "host"
+    working_dir: /opt
+    volumes:
+    - ./flaskr:/opt/flaskr
+    depends_on:
+    - flask_local_server

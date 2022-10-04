@@ -139,7 +139,6 @@ def filename_is_valid(file_name) -> bool:
 
 
 def check_file_is_existed(path_name) -> bool:
-    print(f"path_name: {path_name} : {os.path.isdir(path_name)}")
     return os.path.isfile(path_name)
 
 

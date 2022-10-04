@@ -19,6 +19,24 @@ def main_page():
     return redirect(url_for('page.page_root'))
 
 
+@page.errorhandler(405)
+def give_response_not_found():
+    return ['Not Found', 404]
+
+
+@page.errorhandler(405)
+def give_response_operation_not_allowed():
+    return ['Operation Not Allowed', 405]
+
+
+def take_response(response):
+    if response == FileSystemHelperResponse.NOT_FOUND:
+        return give_response_not_found()
+    elif response == FileSystemHelperResponse.OPERATION_NOT_ALLOWED:
+        return give_response_operation_not_allowed()
+    return f'Result: {response.name}'
+
+
 @page.route('/<path:localSystemFilePath>', methods=['GET'])
 def get_resource(localSystemFilePath):
     file_path = give_relative_return_abs_path(localSystemFilePath)
@@ -68,7 +86,7 @@ def page_post_request(localSystemFilePath):
     else:
         response = FileSystemHelperResponse.OPERATION_NOT_ALLOWED
 
-    return f'POST File {save_path} Result: {response.name}'
+    return take_response(response)
 
 
 @page.route('/<path:localSystemFilePath>', methods=['PATCH'])
@@ -86,7 +104,7 @@ def page_patch_request(localSystemFilePath):
     else:
         response = FileSystemHelperResponse.OPERATION_NOT_ALLOWED
 
-    return f'PATCH File {save_path} Result: {response.name}'
+    return take_response(response)
 
 
 @page.route('/<path:localSystemFilePath>', methods=['DELETE'])
@@ -99,7 +117,7 @@ def page_delete_request(localSystemFilePath):
         response = FileSystemHelperResponse.OPERATION_NOT_ALLOWED
     else:
         response = remove_file(save_path)
-    return f'DELETE File {save_path} Result: {response.name}'
+    return take_response(response)
 
 
 def get_png_image(img_file_name):

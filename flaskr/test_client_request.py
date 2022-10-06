@@ -15,6 +15,8 @@ def remove_file_without_folder(folder_name):
 @pytest.fixture()
 def request_info():
     folder_name = os.path.join(os.path.dirname(__file__), "file")
+    if not os.path.isdir(folder_name):
+        os.makedirs(folder_name)
     remove_file_without_folder(folder_name)
     yield ServerInfo()
 

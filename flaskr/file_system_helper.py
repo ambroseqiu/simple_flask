@@ -137,13 +137,15 @@ def write_binary_to_file(file_path, binary_data):
 
 
 def filename_is_valid(file_name) -> bool:
+    if len(file_name.split('.')) < 2:
+        return False
     name, extension = file_name.split('.')
     with app.app_context():
         return extension in app.config['VALID_FILE_EXTENSION']
 
 
 def check_file_is_existed(path_name) -> bool:
-    return (len(path_name.split('.')) < 2 and os.path.isfile(path_name))
+    return ('.' in path_name and os.path.isfile(path_name))
 
 
 def give_relative_return_abs_path(relative_path):

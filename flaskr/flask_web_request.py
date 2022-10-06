@@ -47,6 +47,8 @@ def get_resource(localSystemFilePath):
     response = FileSystemHelperResponse.SUCCESS
     if not is_directory(file_path):
         response, ret_source = get_request_file(fs, file_path)
+        if response == FileSystemHelperResponse.NOT_FOUND:
+            return take_response(response)
         return ret_source
     else:
         response = fs.get_data_by_request(ret_source,

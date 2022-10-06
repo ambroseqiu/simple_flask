@@ -149,7 +149,6 @@ def check_file_is_existed(path_name) -> bool:
 def give_relative_return_abs_path(relative_path):
     if relative_path[-1] == '/':
         relative_path = relative_path[:-1]
-    print(f'{os.getcwd()}, {relative_path}')
     return os.path.join(os.getcwd(), "flaskr", relative_path)
 
 

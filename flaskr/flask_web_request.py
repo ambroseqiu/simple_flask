@@ -44,27 +44,29 @@ def get_resource(localSystemFilePath):
     file_path = give_relative_return_abs_path(localSystemFilePath)
     fs = FileSystemHelper()
     ret_source = []
+    response = FileSystemHelperResponse.SUCCESS
     if not is_directory(file_path):
-        return get_request_file(fs, file_path)
-
-    response = fs.get_data_by_request(ret_source,
-                                      file_path,
-                                      request.args.get("orderBy"),
-                                      request.args.get("orderByDirection"),
-                                      request.args.get("filterByName"))
+        response, ret_source = get_request_file(fs, file_path)
+        return ret_source
+    else:
+        response = fs.get_data_by_request(ret_source,
+                                        file_path,
+                                        request.args.get("orderBy"),
+                                        request.args.get("orderByDirection"),
+                                        request.args.get("filterByName"))
     if response == FileSystemHelperResponse.NOT_FOUND:
-        abort(404)
+        return take_response(response)
     ret_data = fs.get_json_from_list(ret_source)
     return json.dumps(ret_data, indent=2)
 
 
 def get_request_file(fs, file_path):
+    if not check_file_is_existed(file_path):
+        return FileSystemHelperResponse.NOT_FOUND, None
     if file_path.split('.')[-1] == 'png':
         return get_png_image(file_path)
     content = get_binary_data_from_path(file_path)
-    if content is None:
-        abort(404)
-    return content
+    return FileSystemHelperResponse.SUCCESS,content
 
 
 def has_file_upload() -> bool:
@@ -72,7 +74,7 @@ def has_file_upload() -> bool:
     return file != ''
 
 
-@page.route('/<path:localSystemFilePath>/', methods=['POST'])
+@page.route('/<path:localSystemFilePath>', methods=['POST'])
 def page_post_request(localSystemFilePath):
 
     response = FileSystemHelperResponse.SUCCESS
@@ -91,7 +93,7 @@ def page_post_request(localSystemFilePath):
     return take_response(response)
 
 
-@page.route('/<path:localSystemFilePath>/', methods=['PATCH'])
+@page.route('/<path:localSystemFilePath>', methods=['PATCH'])
 def page_patch_request(localSystemFilePath):
 
     save_path = give_relative_return_abs_path(localSystemFilePath)
@@ -109,7 +111,7 @@ def page_patch_request(localSystemFilePath):
     return take_response(response)
 
 
-@page.route('/<path:localSystemFilePath>/', methods=['DELETE'])
+@page.route('/<path:localSystemFilePath>', methods=['DELETE'])
 def page_delete_request(localSystemFilePath):
 
     save_path = give_relative_return_abs_path(localSystemFilePath)

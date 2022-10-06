@@ -112,7 +112,6 @@ def get_binary_data_from_path(path_name):
 
 
 def check_post_is_allowed(file_path):
-    # print(f'file_path: {file_path}, sub : {os.path.basename("/opt/flaskr/file/test_file.json")}')
     dir_name = os.path.dirname(file_path)
     file_name = os.path.basename(file_path)
     # print(f' dir: {dir_name}, file: {file_name}')
@@ -138,8 +137,6 @@ def write_binary_to_file(file_path, binary_data):
 
 
 def filename_is_valid(file_name) -> bool:
-    if len(file_name.split('.')) < 2:
-        return False
     name, extension = file_name.split('.')
     with app.app_context():
         return extension in app.config['VALID_FILE_EXTENSION']
@@ -150,6 +147,9 @@ def check_file_is_existed(path_name) -> bool:
 
 
 def give_relative_return_abs_path(relative_path):
+    if relative_path[-1] == '/':
+        relative_path = relative_path[:-1]
+    print(f'{os.getcwd()}, {relative_path}')
     return os.path.join(os.getcwd(), "flaskr", relative_path)
 
 

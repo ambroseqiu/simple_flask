@@ -45,4 +45,7 @@ $ docker-compose up
   > flask_local_server    |  * Running on all addresses (0.0.0.0) </br>
   > flask_local_server    |  * Running on http://127.0.0.1:5000 </br>
   > flask_local_server    |  * Running on http://172.19.0.2:5000 </br>
-  - using these two url above.
+  - using these two url above as request url, for example:
+  - GET http://http://172.19.0.2:5000/file
+  - GET http://http://172.19.0.2:5000/file/test_file.txt
+  - POST http://http://172.19.0.2:5000/file/new_file.txt, choose form-data or raw are fine.

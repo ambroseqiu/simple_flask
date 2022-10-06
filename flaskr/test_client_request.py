@@ -70,7 +70,6 @@ class TestAPI:
         api_url = request_info.get_request_api_rul()
         files = TestAPI.create_request_file(test_file_path)
         response = requests.post(api_url, files=files)
-        # print(requests.Request('POST', api_url, files=files).prepare().body.decode('utf8'))
         assert response.status_code == expected
 
     @pytest.mark.parametrize("test_file_path,expected", [("test_file.txt", 200), ("test_file.json", 200)])
@@ -85,6 +84,26 @@ class TestAPI:
     @pytest.mark.parametrize("test_file_path,expected", [("test_file.txt", 200), ("test_file.json", 200)])
     def test_4_delete_valid_request_return_200(self, request_info, test_file_path, expected):
         TestAPI.create_test_file(test_file_path)
+        request_info.set_request_data_path(test_file_path)
+        api_url = request_info.get_request_api_rul()
+        response = requests.delete(api_url)
+        assert response.status_code == expected
+
+    def test_5_invalid_non_file_post_request_return_405(self, request_info):
+        api_url = request_info.get_request_api_rul()
+        response = requests.post(api_url)
+        assert response.status_code == 405
+    
+    @pytest.mark.parametrize("test_file_path,expected", [("test_file.txt", 405), ("test_file.json", 405)])
+    def test_6_patch_invalid_request_return_405(self, request_info, test_file_path, expected):
+        request_info.set_request_data_path(test_file_path)
+        api_url = request_info.get_request_api_rul()
+        files = TestAPI.create_request_file(test_file_path)
+        response = requests.patch(api_url, files=files)
+        assert response.status_code == expected
+    
+    @pytest.mark.parametrize("test_file_path,expected", [("test_file.txt", 405), ("test_file.json", 405)])
+    def test_7_delete_valid_request_return_200(self, request_info, test_file_path, expected):
         request_info.set_request_data_path(test_file_path)
         api_url = request_info.get_request_api_rul()
         response = requests.delete(api_url)

@@ -8,8 +8,8 @@
 $ git clone https://github.com/AmbroseQiu/simple_flask.git
 ```
 
-## Download host machine like windows/Linux or MacOs
-> requirement : docker, docker-compose, homework zip file
+## Running on Host environment such as Windows/Linux/MacOS 
+- requirement : docker, docker-compose, homework zip file
 - check https://docs.docker.com/engine/install/ for more information about docker installation.
 - download the zip file and extract the source.
 

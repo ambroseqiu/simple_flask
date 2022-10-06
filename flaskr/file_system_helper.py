@@ -118,7 +118,7 @@ def check_post_is_allowed(file_path):
     # print(f' not check_file_is_existed(file_path) : {not check_file_is_existed(file_path)}')
     # print(f' is_directory(dir_name) : {is_directory(dir_name)}')
     # print(f' filename_is_valid(file_name) : {filename_is_valid(file_name)}')
-    return (len(file_name.split('.')) > 0 and not check_file_is_existed(file_path)
+    return (not check_file_is_existed(file_path)
             and is_directory(dir_name)
             and filename_is_valid(file_name))
 
@@ -143,7 +143,7 @@ def filename_is_valid(file_name) -> bool:
 
 
 def check_file_is_existed(path_name) -> bool:
-    return os.path.isfile(path_name)
+    return (len(path_name.split('.')) < 2 or os.path.isfile(path_name))
 
 
 def give_relative_return_abs_path(relative_path):

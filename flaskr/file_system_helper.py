@@ -143,7 +143,7 @@ def filename_is_valid(file_name) -> bool:
 
 
 def check_file_is_existed(path_name) -> bool:
-    return (len(path_name.split('.')) < 2 or os.path.isfile(path_name))
+    return (len(path_name.split('.')) < 2 and os.path.isfile(path_name))
 
 
 def give_relative_return_abs_path(relative_path):

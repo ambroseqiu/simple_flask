@@ -23,11 +23,11 @@ import os
 #         return self._filtering_string_
 
 
-def test_is_directory_false():
+def test_1_is_directory_false():
     assert is_directory("/not/a/valid/path") is False
 
 
-def test_is_directory_true():
+def test_1_is_directory_true():
     assert is_directory(os.getcwd()) is True
 
 

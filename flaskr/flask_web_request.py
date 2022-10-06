@@ -1,5 +1,5 @@
 import json
-from flask import request, redirect, url_for, render_template, Blueprint, abort
+from flask import request, redirect, url_for, render_template, Blueprint, abort, Response   
 from flaskr.file_system_helper import FileSystemHelper, FileSystemHelperResponse
 from flaskr.file_system_helper import remove_file, check_file_is_existed, write_binary_to_file,\
         is_directory, give_relative_return_abs_path, check_post_is_allowed,get_binary_data_from_path
@@ -19,22 +19,24 @@ def main_page():
     return redirect(url_for('page.page_root'))
 
 
-@page.errorhandler(405)
+@page.errorhandler(404)
 def give_response_not_found():
-    return ['Not Found', 404]
+    return {'Result':'Not Found'}, 404
 
 
 @page.errorhandler(405)
 def give_response_operation_not_allowed():
-    return ['Operation Not Allowed', 405]
+    return {'Result':'Operation Not Allowed'}, 405
 
 
-def take_response(response):
-    if response == FileSystemHelperResponse.NOT_FOUND:
+
+def take_response(file_system_response):
+
+    if file_system_response == FileSystemHelperResponse.NOT_FOUND:
         return give_response_not_found()
-    elif response == FileSystemHelperResponse.OPERATION_NOT_ALLOWED:
+    elif file_system_response == FileSystemHelperResponse.OPERATION_NOT_ALLOWED:
         return give_response_operation_not_allowed()
-    return f'Result: {response.name}'
+    return {'Result':'Successful'}, 200
 
 
 @page.route('/<path:localSystemFilePath>', methods=['GET'])
@@ -70,12 +72,12 @@ def has_file_upload() -> bool:
     return file != ''
 
 
-@page.route('/<path:localSystemFilePath>', methods=['POST'])
+@page.route('/<path:localSystemFilePath>/', methods=['POST'])
 def page_post_request(localSystemFilePath):
 
     response = FileSystemHelperResponse.SUCCESS
     save_path = give_relative_return_abs_path(localSystemFilePath)
-
+    # print(f'save_path: {save_path}, localSystemFilePath: {localSystemFilePath}')
     if check_post_is_allowed(save_path):
         if has_file_upload():
             file = request.files.get('file')
@@ -89,7 +91,7 @@ def page_post_request(localSystemFilePath):
     return take_response(response)
 
 
-@page.route('/<path:localSystemFilePath>', methods=['PATCH'])
+@page.route('/<path:localSystemFilePath>/', methods=['PATCH'])
 def page_patch_request(localSystemFilePath):
 
     save_path = give_relative_return_abs_path(localSystemFilePath)
@@ -107,7 +109,7 @@ def page_patch_request(localSystemFilePath):
     return take_response(response)
 
 
-@page.route('/<path:localSystemFilePath>', methods=['DELETE'])
+@page.route('/<path:localSystemFilePath>/', methods=['DELETE'])
 def page_delete_request(localSystemFilePath):
 
     save_path = give_relative_return_abs_path(localSystemFilePath)
@@ -124,9 +126,6 @@ def get_png_image(img_file_name):
     data = open(img_file_name, 'rb').read()
     image = base64.b64encode(data).decode()
 
-    # image = base64.b64encode(buf)
-
-    # return jsonify({'image_url': image})
     return render_template('show_png.html', image=image)
 
 

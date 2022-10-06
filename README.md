@@ -1,6 +1,6 @@
 # User Guide
-# **Set UP Environment**
-## Using **play with docker** to create onlone docker instance
+# **Set UP Docker Environment**
+## Using **play with docker** to create online docker instance
 - please check following page https://www.docker.com/101-tutorial/ for more information
 - click **ADD NEW INSTANCE** button on the left side and get into the terminal.
 - get source code through git tool: 
@@ -8,7 +8,7 @@
 $ git clone https://github.com/AmbroseQiu/simple_flask.git
 ```
 
-## Using host machine like windows/Linux or MacOs
+## Download host machine like windows/Linux or MacOs
 > requirement : docker, docker-compose, homework zip file
 - check https://docs.docker.com/engine/install/ for more information about docker installation.
 - download the zip file and extract the source.

@@ -8,7 +8,7 @@ services:
     networks:
       - test
     container_name: flask_local_server
-    command: flask --app flaskr run --host=0.0.0.0
+    command: flask --app flaskr --debug run --host=0.0.0.0
     working_dir: /opt
     ports:
       - "5000:5000"
@@ -19,7 +19,7 @@ services:
     container_name: pytest
     image: flask_local_server
     # command: ping host.docker.internal
-    command: python3 -m pytest flaskr
+    command: pytest -s flaskr
     working_dir: /opt
     volumes:
       - ./flaskr:/opt/flaskr

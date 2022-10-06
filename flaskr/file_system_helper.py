@@ -19,7 +19,7 @@ class FileSystemHelperResponse(IntEnum):
 
 class FileSystemHelper:
     def __init__(self):
-        self._local_system_file_path_ = "./file"
+        self._local_system_file_path_ = "./flaskr/file"
         self.__order_dict_ = {'lastModified': 1, "size": 2, "filename": 3}
         self._file_order_by_ = OrderBy(self.__order_dict_['filename'])
         self._reverse_ = False
@@ -112,8 +112,13 @@ def get_binary_data_from_path(path_name):
 
 
 def check_post_is_allowed(file_path):
+    # print(f'file_path: {file_path}, sub : {os.path.basename("/opt/flaskr/file/test_file.json")}')
     dir_name = os.path.dirname(file_path)
     file_name = os.path.basename(file_path)
+    # print(f' dir: {dir_name}, file: {file_name}')
+    # print(f' not check_file_is_existed(file_path) : {not check_file_is_existed(file_path)}')
+    # print(f' is_directory(dir_name) : {is_directory(dir_name)}')
+    # print(f' filename_is_valid(file_name) : {filename_is_valid(file_name)}')
     return (len(file_name.split('.')) > 0 and not check_file_is_existed(file_path)
             and is_directory(dir_name)
             and filename_is_valid(file_name))
@@ -133,6 +138,8 @@ def write_binary_to_file(file_path, binary_data):
 
 
 def filename_is_valid(file_name) -> bool:
+    if len(file_name.split('.')) < 2:
+        return False
     name, extension = file_name.split('.')
     with app.app_context():
         return extension in app.config['VALID_FILE_EXTENSION']
@@ -143,31 +150,9 @@ def check_file_is_existed(path_name) -> bool:
 
 
 def give_relative_return_abs_path(relative_path):
-    return os.path.join(os.getcwd(), relative_path)
+    return os.path.join(os.getcwd(), "flaskr", relative_path)
 
 
 def is_directory(directory_path) -> bool:
     return os.path.isdir(directory_path)
-
-
-if __name__ == '__main__':
-    helper = FileSystemHelper()
-    # dirs_list = []
-    # code = helper.get_data_by_request(dirs_list, 'file', orderby_kind='size', orderby_direction='Ascending', orderby_name='*')
-    # # print(os.getcwd())
-    # # print(code)
-    # print(dirs_list)
-    # ret_dirs = helper.get_json_from_list(dirs_list)
-    # print(ret_dirs)
-    # print(json.dumps(ret_dirs))
-    # data = bytes()
-    # ret = helper.get_binary_data_from_path("./file/abc.txt", data)
-    # print(data)
-
-    filename_is_valid("./abcdefg.aat")
-
-    # app = create_app()
-    # with app.app_context():
-    #     extension = app.config['VALID_FILE_EXTENSION']
-    # print(extension)
 
